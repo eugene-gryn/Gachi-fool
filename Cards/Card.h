@@ -9,7 +9,12 @@ public:
 	{
 	}
 
-	sf::RectangleShape Shape;
+	sf::RectangleShape* Shape;
+
+	~Card()
+	{
+		delete Shape;
+	}
 	
 
 protected:
