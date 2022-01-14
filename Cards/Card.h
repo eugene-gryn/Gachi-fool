@@ -1,22 +1,30 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 
-class Card
-{
-public:
+#include "CardRank.h"
+#include "CardsSuits.h"
 
-	Card()
+namespace Cards {
+
+	class Card
 	{
-	}
+	public:
 
-	sf::RectangleShape* Shape;
+		Card(bool isTrump, CardRunk36 runk, Suits suit);
 
-	~Card()
-	{
-		delete Shape;
-	}
-	
+		static bool canBeat(const Card& beat, const Card& beaten);
 
-protected:
+		static bool SameRunk(const Card& one, const Card& another);
 
-};
+		void setTrump(bool trump);
+		bool getTrump();
+
+		Suits getSuit();
+
+	protected:
+
+		bool isTrump;
+		
+		CardRunk36 runk;
+		Suits suit;
+	};
+}
