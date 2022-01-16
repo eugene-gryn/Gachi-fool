@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="CardRank.h" />
     <ClInclude Include="CardsSuits.h" />
     <ClInclude Include="Container.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="SFML_Card.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Cards.cpp" />
     <ClCompile Include="Container.cpp" />

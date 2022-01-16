@@ -11,7 +11,7 @@ Cards::CardContainer::CardContainer(sf::Vector2f position, sf::Vector2f ofset)
 	this->offset = ofset;
 }
 
-void Cards::CardContainer::add(SFCard & card)
+void Cards::CardContainer::add(sf::RectangleShape & card)
 {
 	container.emplace_back(card);
 
