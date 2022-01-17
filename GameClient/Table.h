@@ -20,12 +20,15 @@ public:
 	~FoolTable()
 	{
 		delete card;
+		delete container;
 	}
 
 protected:
 	sf::RenderWindow* window;
 
 	Cards::SFCard* card;
+
+	Cards::CardContainerAnimated* container;
 
 	std::deque<AnimeteMove> animations;
 };

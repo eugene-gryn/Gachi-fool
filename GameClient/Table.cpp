@@ -10,7 +10,16 @@ FoolTable::FoolTable(sf::RenderWindow * dockWin)
 	card->setPosition(20, 20);
 	card->setSize(sf::Vector2f(80, 100));
 
-	animations.emplace_back(AnimeteMove(card, card->getPosition(), sf::Vector2f(100, 100), 300));
+
+	container = new Cards::CardContainerAnimated(sf::Vector2f(200, 200), sf::Vector2f(100, 0), &animations, 300);
+
+	Cards::SFCard c1(false, Cards::CardRunk36::J, Cards::Suits::Clubs, sf::Vector2f(80, 100), nullptr);
+	Cards::SFCard c2(false, Cards::CardRunk36::J, Cards::Suits::Clubs, sf::Vector2f(80, 100), nullptr);
+	Cards::SFCard c3(false, Cards::CardRunk36::J, Cards::Suits::Clubs, sf::Vector2f(80, 100), nullptr);
+
+	container->add(c1);
+	container->add(c2);
+	container->add(c3);
 }
 
 void FoolTable::loop()
@@ -26,22 +35,32 @@ void FoolTable::loop()
 				window->close();
 			if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Escape) window->close();
+				if (event.key.code == sf::Keyboard::PageUp) container->add(new Cards::SFCard(false, Cards::CardRunk36::J, Cards::Suits::Clubs, sf::Vector2f(80, 100), nullptr));
+				if (event.key.code == sf::Keyboard::PageDown) {
+					if (container->getSizeElms() > 0) {
+						container->remove(container->getSizeElms() - 1);
+					}
+				}
+				if (event.key.code == sf::Keyboard::Num1) container->setOffset(sf::Vector2f(100, 0));
+				if (event.key.code == sf::Keyboard::Num2) container->setOffset(sf::Vector2f(200, 0));
 			}
 		}
 		// Clear screen
 		window->clear(sf::Color::White);
+
+
 
 		//Animation
 		for (size_t i = 0; i < animations.size(); i++)
 		{
 			if (animations[i].update()) {
 				animations.erase(animations.begin() + i);
-				std::cout << "Deleted" << std::endl;
 			}
 		}
 
 		//Draw
 		window->draw(*card);
+		window->draw(*container);
 
 		// Update the window
 		window->display();

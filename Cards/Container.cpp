@@ -18,6 +18,13 @@ void Cards::CardContainer::add(sf::RectangleShape & card)
 	updateArrange();
 }
 
+void Cards::CardContainer::add(sf::RectangleShape * card)
+{
+	container.emplace_back(*card);
+
+	updateArrange();
+}
+
 void Cards::CardContainer::remove(int index)
 {
 	auto i = container.begin();
@@ -75,6 +82,11 @@ void Cards::CardContainer::setSize(sf::Vector2f size)
 	updateArrange();
 }
 
+int Cards::CardContainer::getSizeElms()
+{
+	return container.size();
+}
+
 void Cards::CardContainer::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	for (auto& i : container)
@@ -93,5 +105,18 @@ void Cards::CardContainer::updateArrange()
 	}
 }
 
+Cards::CardContainerAnimated::CardContainerAnimated(sf::Vector2f position, sf::Vector2f ofset, std::deque<AnimeteMove>* animation, int defaultAnimationDuration)
+	: CardContainer(position, ofset)
+{
+	this->animations = animation;
+	this->DefaultAnimationDuration = defaultAnimationDuration;
+}
 
-
+void Cards::CardContainerAnimated::updateArrange()
+{
+	for (size_t i = 0; i < container.size(); i++)
+	{
+		sf::Vector2f offsetPos(position.x + (offset.x * i), position.y + (offset.y * i));
+		if (container[i].getPosition() != offsetPos) animations->emplace_back(AnimeteMove(&container[i], container[i].getPosition(), offsetPos, this->DefaultAnimationDuration));
+	}
+}

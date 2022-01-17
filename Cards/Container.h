@@ -5,13 +5,19 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+#include "Animation.h"
+#include <deque>
+
 namespace Cards {
+
 	class CardContainer : public sf::Drawable {
 	public:
 		
 		CardContainer(sf::Vector2f position, sf::Vector2f ofset);
 		
+
 		void add(sf::RectangleShape& card);
+		void add(sf::RectangleShape* card);
 		void remove(int index);
 		void changePosition(int From_index, int To_index);
 
@@ -24,7 +30,7 @@ namespace Cards {
 		sf::Vector2f getSize();
 		void setSize(sf::Vector2f size);
 
-
+		int getSizeElms();
 
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -36,6 +42,24 @@ namespace Cards {
 		sf::Vector2f offset;
 
 
-		void updateArrange();
+		virtual void updateArrange();
 	};
+
+
+	class CardContainerAnimated
+		: public CardContainer {
+	public:
+
+		CardContainerAnimated(sf::Vector2f position, sf::Vector2f ofset, std::deque<AnimeteMove>*, int defaultAnimationDuration = 300);
+
+	protected:
+
+		virtual void updateArrange() override;
+
+		std::deque<AnimeteMove>* animations;
+
+		int DefaultAnimationDuration;
+	};
+
 }
+
