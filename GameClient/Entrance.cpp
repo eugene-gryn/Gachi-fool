@@ -8,6 +8,9 @@
 
 #include "Table.h"
 
+
+
+
 int main() {
 	// Create the main window
 	sf::ContextSettings settings;

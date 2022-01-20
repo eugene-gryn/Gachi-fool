@@ -13,3 +13,14 @@ Cards::SFCard::SFCard(bool isTrump, CardRunk36 runk, Suits suit, sf::Vector2f si
 		this->setTexture(texture);
 	}
 }
+
+Cards::SFCard::SFCard()
+	: Card(false, Cards::CardRunk36::N6, Cards::Suits::Hearts), RectangleShape(sf::Vector2f(0, 0))
+{
+	this->setFillColor(sf::Color::Red);
+}
+
+Cards::SFCard::SFCard(const SFCard & other)
+	: Card(other.isTrump, other.runk, other.suit), RectangleShape(static_cast<RectangleShape>(other))
+{
+}

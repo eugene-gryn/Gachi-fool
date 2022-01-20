@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <deque>
+#include "PairCard.h"
 
 #include "Animation.h"
 
@@ -25,8 +26,9 @@ public:
 
 protected:
 	sf::RenderWindow* window;
-
 	Cards::SFCard* card;
+	Cards::CardPair* pair;
+
 
 	Cards::CardContainerAnimated* container;
 

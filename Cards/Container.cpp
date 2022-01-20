@@ -4,46 +4,26 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-
 Cards::CardContainer::CardContainer(sf::Vector2f position, sf::Vector2f ofset)
 {
-	this->position = position;
+	this->setPosition(position);
 	this->offset = ofset;
 }
 
-void Cards::CardContainer::add(sf::RectangleShape & card)
+Cards::CardContainer::CardContainer(const CardContainer& other)
 {
-	container.emplace_back(card);
-
-	updateArrange();
+	setPosition(other.getPosition());
+	this->offset = other.offset;
 }
 
-void Cards::CardContainer::add(sf::RectangleShape * card)
+Cards::CardContainer::CardContainer()
+	: CardContainer(sf::Vector2f(0,0), sf::Vector2f(0, 0))
 {
-	container.emplace_back(*card);
-
-	updateArrange();
 }
 
-void Cards::CardContainer::remove(int index)
+void Cards::CardContainer::add(sf::RectangleShape * shape)
 {
-	auto i = container.begin();
-	std::advance(i, index);
-	container.erase(i);
-
-	updateArrange();
-}
-
-void Cards::CardContainer::changePosition(int From_index, int To_index)
-{
-	auto from = container.at(From_index);
-	auto i = container.begin();
-	std::advance(i, To_index);
-
-	remove(From_index);
-
-
-	container.emplace(i, from);
+	container.push_back(shapeElement(shape));
 
 	updateArrange();
 }
@@ -59,26 +39,9 @@ void Cards::CardContainer::setOffset(sf::Vector2f offset)
 	updateArrange();
 }
 
-sf::Vector2f Cards::CardContainer::getPosition()
-{
-	return position;
-}
-
-void Cards::CardContainer::setPosition(sf::Vector2f pos)
-{
-	position = pos;
-	updateArrange();
-}
-
-sf::Vector2f Cards::CardContainer::getSize()
-{
-	auto endPoint = container.at(container.size() - 1).getPosition();
-	return sf::Vector2f(std::abs(endPoint.x - position.x), std::abs(endPoint.y - position.y));
-}
-
 void Cards::CardContainer::setSize(sf::Vector2f size)
 {
-	offset = sf::Vector2f(size.x / container.size(), size.y / container.size());
+	this->offset = sf::Vector2f(size.x / container.size(), size.y / container.size());
 	updateArrange();
 }
 
@@ -87,21 +50,21 @@ int Cards::CardContainer::getSizeElms()
 	return container.size();
 }
 
+
+
 void Cards::CardContainer::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	for (auto& i : container)
 	{
-		target.draw(i);
+		target.draw(*i.shape);
 	}
 }
-
-
 
 void Cards::CardContainer::updateArrange()
 {
 	for (size_t i = 0; i < container.size(); i++)
 	{
-		container[i].setPosition(position.x + (offset.x * i), position.y + (offset.y * i));
+		container[i].shape->setPosition(this->getPosition().x + (offset.x * i), this->getPosition().y + (offset.y * i));
 	}
 }
 
@@ -112,11 +75,17 @@ Cards::CardContainerAnimated::CardContainerAnimated(sf::Vector2f position, sf::V
 	this->DefaultAnimationDuration = defaultAnimationDuration;
 }
 
+Cards::CardContainerAnimated::CardContainerAnimated()
+{
+	this->animations = nullptr;
+	this->DefaultAnimationDuration = 0;
+}
+
 void Cards::CardContainerAnimated::updateArrange()
 {
 	for (size_t i = 0; i < container.size(); i++)
 	{
-		sf::Vector2f offsetPos(position.x + (offset.x * i), position.y + (offset.y * i));
-		if (container[i].getPosition() != offsetPos) animations->emplace_back(AnimeteMove(&container[i], container[i].getPosition(), offsetPos, this->DefaultAnimationDuration));
+		sf::Vector2f offsetPos(this->getPosition().x + (offset.x * i), this->getPosition().y + (offset.y * i));
+		if (container[i].shape->getPosition() != offsetPos) animations->emplace_back(AnimeteMove(container[i].shape, container[i].shape->getPosition(), offsetPos, this->DefaultAnimationDuration));
 	}
 }

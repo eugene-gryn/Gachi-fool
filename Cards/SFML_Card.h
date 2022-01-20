@@ -10,6 +10,10 @@ namespace Cards {
 
 		SFCard(bool isTrump, CardRunk36 runk, Suits suit, sf::Vector2f size, sf::Texture* texture = nullptr);
 
+		SFCard();
+
+		SFCard(const SFCard& other);
+
 	protected:
 
 	};
